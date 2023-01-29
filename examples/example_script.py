@@ -1,7 +1,6 @@
 import mlxu
 
 
-
 FLAGS, FLAGS_DEF = mlxu.define_flags_with_default(
     name='example_experiment',
     seed=42,
