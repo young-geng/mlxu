@@ -30,7 +30,7 @@ def define_flags_with_default(**kwargs):
             absl.flags.DEFINE_string(key, val, "automatically defined flag")
         else:
             raise ValueError("Incorrect value type")
-    return kwargs, absl.flags.FLAGS
+    return absl.flags.FLAGS, kwargs
 
 
 def print_flags(flags, flags_def):
@@ -68,7 +68,7 @@ def user_flags_to_config_dict(flags, flags_def):
 def flatten_config_dict(config, prefix=None):
     output = {}
     for key, val in config.items():
-        if isinstance(val, ConfigDict):
+        if isinstance(val, ConfigDict) or isinstance(val, dict):
             output.update(flatten_config_dict(val, prefix=key))
         else:
             if prefix is not None:

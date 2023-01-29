@@ -8,7 +8,6 @@ from socket import gethostname
 
 import cloudpickle as pickle
 import gcsfs
-import numpy as np
 import wandb
 from absl import logging
 from ml_collections import ConfigDict

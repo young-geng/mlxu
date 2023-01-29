@@ -8,13 +8,13 @@ from socket import gethostname
 
 import cloudpickle as pickle
 import gcsfs
-import numpy as np
 import wandb
 from absl import logging
 from ml_collections import ConfigDict
 from ml_collections.config_dict import config_dict
 
 from .utils import open_file
+from .config import flatten_config_dict
 
 
 class WandBLogger(object):
@@ -40,7 +40,6 @@ class WandBLogger(object):
     def __init__(self, config, variant, enable=True):
         self.enable = enable
         self.config = self.get_default_config(config)
-        self.async_manager = ThreadPoolExecutor(max_workers=1)
 
         if self.config.experiment_id is None:
             self.config.experiment_id = uuid.uuid4().hex
@@ -67,13 +66,13 @@ class WandBLogger(object):
                     self.config.gcs_output_dir, self.config.experiment_id
                 )
 
-        self._variant = copy(variant)
+        self._variant = flatten_config_dict(variant)
 
         if "hostname" not in self._variant:
             self._variant["hostname"] = gethostname()
 
         if self.config.random_delay > 0:
-            time.sleep(np.random.uniform(0, self.config.random_delay))
+            time.sleep(random.uniform(0, self.config.random_delay))
 
         if self.enable:
             self.run = wandb.init(
