@@ -119,6 +119,12 @@ class WandBLogger(object):
     def output_dir(self):
         return self.config.output_dir
 
+    @property
+    def checkpoint_dir(self):
+        if self.config.gcs_output_dir != "":
+            return self.config.gcs_output_dir
+        return self.config.output_dir
+
 
 def prefix_metrics(metrics, prefix):
     return {"{}/{}".format(prefix, key): value for key, value in metrics.items()}
