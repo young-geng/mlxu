@@ -70,6 +70,23 @@ if __name__ == "__main__":
     mlxu.run(main)
 ```
 
+The flags can be passed in via command line arguments:
+```shell
+python examples/cli_logging.py \
+    --name='example' \
+    --seed=24 \
+    --learning_rate=1.0 \
+    --use_mlxu=True \
+    --network_architecture.activation='gelu' \
+    --network_architecture.hidden_dim=126 \
+    --network_architecture.hidden_layers=2 \
+    --logger.online=True \
+    --logger.project='mlxu_example'
+```
+
+Specifically, the `logger.online` option controls whether the logger will upload
+the data to W&B, and the `logger.project` option controls the name of the W&B
+project.
 
 ## JAX Random Number Generator
 MLXU also provides convenient wrapper around JAX's random number generators
