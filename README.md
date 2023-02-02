@@ -63,6 +63,7 @@ def main(argv):
     # Create logger and log metrics
     logger = mlxu.WandBLogger(FLAGS.logger, mlxu.get_user_flags(FLAGS, FLAGS_DEF))
     logger.log({'step': 1, 'loss': 10.5})
+    logger.save_pickle([1, 2, 4, 5], 'checkpoint.pkl')
 
 
 # Run the main function

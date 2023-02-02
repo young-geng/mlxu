@@ -104,8 +104,7 @@ class WandBLogger(object):
             else:
                 path = os.path.join(self.config.output_dir, filename)
 
-            with open_file(path, "wb") as fout:
-                pickle.dump(obj, fout)
+            save_pickle(obj, path)
 
     @property
     def experiment_id(self):
@@ -128,6 +127,11 @@ class WandBLogger(object):
 
 def prefix_metrics(metrics, prefix):
     return {"{}/{}".format(prefix, key): value for key, value in metrics.items()}
+
+
+def save_pickle(obj, path):
+    with open_file(path, 'wb') as fout:
+        pickle.dump(obj, fout)
 
 
 def load_pickle(path):
