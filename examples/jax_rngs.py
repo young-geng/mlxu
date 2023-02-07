@@ -22,7 +22,7 @@ def sum_of_random_uniform(rng_key):
 
 def main(argv):
     # Setup global rng generator
-    jax_utils.init_rng(42)
+    jax_utils.set_random_seed(42)
 
     # Get an rng key
     rng_key = jax_utils.next_rng()

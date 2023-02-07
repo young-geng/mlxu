@@ -1,5 +1,7 @@
 import dataclasses
+import random
 
+import numpy as np
 import jax
 import jax.numpy as jnp
 import flax
@@ -112,3 +114,21 @@ def named_tree_map(f, tree, is_leaf=None, sep=None):
         name = id_to_name[id(leaf)]
         return f(name, leaf)
     return jax.tree_util.tree_map(map_fn, tree)
+
+
+def collect_metrics(metrics, names, prefix=None):
+    collected = {}
+    for name in names:
+        if name in metrics:
+            collected[name] = jnp.mean(metrics[name])
+    if prefix is not None:
+        collected = {
+            '{}/{}'.format(prefix, key): value for key, value in collected.items()
+        }
+    return collected
+
+
+def set_random_seed(seed):
+    np.random.seed(seed)
+    random.seed(seed)
+    init_rng(seed)
