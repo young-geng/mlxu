@@ -5,13 +5,9 @@ import time
 import uuid
 from copy import copy
 from socket import gethostname
+import logging
 
 import cloudpickle as pickle
-import gcsfs
-import wandb
-from absl import logging
-from ml_collections import ConfigDict
-from ml_collections.config_dict import config_dict
 import gcsfs
 
 
@@ -32,6 +28,18 @@ class Timer(object):
 
 def open_file(path, mode='rb'):
     if path.startswith("gs://"):
+        logging.getLogger("fsspec").setLevel(logging.WARNING)
         return gcsfs.GCSFileSystem().open(path, mode, cache_type='block')
     else:
         return open(path, mode)
+
+
+def save_pickle(obj, path):
+    with open_file(path, 'wb') as fout:
+        pickle.dump(obj, fout)
+
+
+def load_pickle(path):
+    with open_file(path, 'rb') as fin:
+        data = pickle.load(fin)
+    return data

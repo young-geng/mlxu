@@ -116,6 +116,15 @@ def named_tree_map(f, tree, is_leaf=None, sep=None):
     return jax.tree_util.tree_map(map_fn, tree)
 
 
+def get_pytree_shape_info(tree):
+    flattend_tree = flatten_tree(tree, sep='/')
+    shapes = []
+    for key in sorted(list(flattend_tree.keys())):
+        val = flattend_tree[key]
+        shapes.append(f'{key}: {val.dtype}, {val.shape}')
+    return '\n'.join(shapes)
+
+
 def collect_metrics(metrics, names, prefix=None):
     collected = {}
     for name in names:

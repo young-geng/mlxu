@@ -13,7 +13,7 @@ from absl import logging
 from ml_collections import ConfigDict
 from ml_collections.config_dict import config_dict
 
-from .utils import open_file
+from .utils import open_file, save_pickle, load_pickle
 from .config import flatten_config_dict
 
 
@@ -127,14 +127,3 @@ class WandBLogger(object):
 
 def prefix_metrics(metrics, prefix):
     return {"{}/{}".format(prefix, key): value for key, value in metrics.items()}
-
-
-def save_pickle(obj, path):
-    with open_file(path, 'wb') as fout:
-        pickle.dump(obj, fout)
-
-
-def load_pickle(path):
-    with open_file(path, 'rb') as fin:
-        data = pickle.load(fin)
-    return data

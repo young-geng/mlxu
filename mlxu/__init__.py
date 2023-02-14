@@ -8,9 +8,5 @@ from .config import (
     config_dict, define_flags_with_default, print_flags, get_user_flags,
     user_flags_to_config_dict, flatten_config_dict, function_args_to_config
 )
-from .logging import (
-    WandBLogger, prefix_metrics, open_file, save_pickle, load_pickle
-)
-from .utils import (
-    Timer, open_file
-)
+from .logging import WandBLogger, prefix_metrics
+from .utils import Timer, open_file, save_pickle, load_pickle
