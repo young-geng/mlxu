@@ -39,6 +39,7 @@ FLAGS, FLAGS_DEF = mlxu.define_flags_with_default(
     seed=42,                            # integer flag
     learning_rate=1e-3,                 # floating point flag
     use_mlxu=True,                      # boolean flag
+    epochs=(10, 'Number of epochs'),    # we can also specify help strings
     network_architecture=mlxu.config_dict(
         activation='relu',
         hidden_dim=128,
