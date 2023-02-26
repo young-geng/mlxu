@@ -9,4 +9,6 @@ from .config import (
     user_flags_to_config_dict, flatten_config_dict, function_args_to_config
 )
 from .logging import WandBLogger, prefix_metrics
-from .utils import Timer, open_file, save_pickle, load_pickle
+from .utils import (
+    Timer, open_file, save_pickle, load_pickle, text_to_array, array_to_text
+)

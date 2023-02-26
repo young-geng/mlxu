@@ -6,7 +6,9 @@ import uuid
 from copy import copy
 from socket import gethostname
 import logging
+from io import BytesIO
 
+import numpy as np
 import cloudpickle as pickle
 import gcsfs
 
@@ -43,3 +45,13 @@ def load_pickle(path):
     with open_file(path, 'rb') as fin:
         data = pickle.load(fin)
     return data
+
+
+def text_to_array(text, encoding='utf-8'):
+    return np.frombuffer(text.encode(encoding), dtype='uint8')
+
+
+def array_to_text(array, encoding='utf-8'):
+    with BytesIO(array) as fin:
+        text = fin.read().decode(encoding)
+    return text
