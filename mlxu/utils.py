@@ -28,10 +28,10 @@ class Timer(object):
         return self._time
 
 
-def open_file(path, mode='rb'):
+def open_file(path, mode='rb', cache_type='readahead'):
     if path.startswith("gs://"):
         logging.getLogger("fsspec").setLevel(logging.WARNING)
-        return gcsfs.GCSFileSystem().open(path, mode, cache_type='block')
+        return gcsfs.GCSFileSystem().open(path, mode, cache_type=cache_type)
     else:
         return open(path, mode)
 
