@@ -25,7 +25,7 @@ class WandBLogger(object):
         config.prefix = ""
         config.project = "mlxu"
         config.output_dir = "/tmp/mlxu"
-        config.gcs_output_dir = ""
+        config.wandb_dir = ""
         config.random_delay = 0.0
         config.experiment_id = config_dict.placeholder(str)
         config.anonymous = config_dict.placeholder(str)
@@ -59,12 +59,22 @@ class WandBLogger(object):
                 self.config.output_dir = os.path.join(
                     self.config.output_dir, self.config.experiment_id
                 )
-                os.makedirs(self.config.output_dir, exist_ok=True)
+                if not self.config.output_dir.startswith("gs://"):
+                    os.makedirs(self.config.output_dir, exist_ok=True)
 
-            if self.config.gcs_output_dir != "":
-                self.config.gcs_output_dir = os.path.join(
-                    self.config.gcs_output_dir, self.config.experiment_id
+            if self.config.wandb_dir == "":
+                if not self.config.output_dir.startswith("gs://"):
+                    # Use the same directory as output_dir if it is not a GCS path.
+                    self.config.wandb_dir = self.config.output_dir
+                else:
+                    # Otherwise, use a temporary directory.
+                    self.config.wandb_dir = tempfile.mkdtemp()
+            else:
+                # Join the wandb_dir with the experiment_id.
+                self.config.wandb_dir = os.path.join(
+                    self.config.wandb_dir, self.config.experiment_id
                 )
+                os.makedirs(self.config.wandb_dir, exist_ok=True)
 
         self._variant = flatten_config_dict(variant)
 
@@ -79,7 +89,7 @@ class WandBLogger(object):
                 reinit=True,
                 config=self._variant,
                 project=self.config.project,
-                dir=self.config.output_dir,
+                dir=self.config.wandb_dir,
                 id=self.config.experiment_id,
                 anonymous=self.config.anonymous,
                 notes=self.config.notes,
@@ -99,12 +109,7 @@ class WandBLogger(object):
 
     def save_pickle(self, obj, filename):
         if self.enable:
-            if self.config.gcs_output_dir != "":
-                path = os.path.join(self.config.gcs_output_dir, filename)
-            else:
-                path = os.path.join(self.config.output_dir, filename)
-
-            save_pickle(obj, path)
+            save_pickle(obj, os.path.join(self.config.output_dir, filename))
 
     @property
     def experiment_id(self):
@@ -119,10 +124,8 @@ class WandBLogger(object):
         return self.config.output_dir
 
     @property
-    def checkpoint_dir(self):
-        if self.config.gcs_output_dir != "":
-            return self.config.gcs_output_dir
-        return self.config.output_dir
+    def wandb_dir(self):
+        return self.config.wandb_dir
 
 
 def prefix_metrics(metrics, prefix):
