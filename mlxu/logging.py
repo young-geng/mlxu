@@ -10,32 +10,29 @@ import cloudpickle as pickle
 import gcsfs
 import wandb
 from absl import logging
-from ml_collections import ConfigDict
-from ml_collections.config_dict import config_dict
 
 from .utils import open_file, save_pickle, load_pickle
-from .config import flatten_config_dict
+from .config import (
+    config_dict, config_placeholder, update_config_dict, flatten_config_dict
+)
 
 
 class WandBLogger(object):
     @staticmethod
     def get_default_config(updates=None):
-        config = ConfigDict()
+        config = config_dict()
         config.online = False
         config.prefix = ""
         config.project = "mlxu"
         config.output_dir = "/tmp/mlxu"
         config.wandb_dir = ""
         config.random_delay = 0.0
-        config.experiment_id = config_dict.placeholder(str)
-        config.anonymous = config_dict.placeholder(str)
-        config.notes = config_dict.placeholder(str)
-        config.entity = config_dict.placeholder(str)
+        config.experiment_id = config_placeholder(str)
+        config.anonymous = config_placeholder(str)
+        config.notes = config_placeholder(str)
+        config.entity = config_placeholder(str)
         config.prefix_to_id = False
-
-        if updates is not None:
-            config.update(ConfigDict(updates).copy_and_resolve_references())
-        return config
+        return update_config_dict(config, updates)
 
     def __init__(self, config, variant, enable=True):
         self.enable = enable

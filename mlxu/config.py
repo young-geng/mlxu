@@ -4,12 +4,14 @@ import random
 import tempfile
 import time
 import inspect
+from copy import deepcopy
 
 import absl.flags
 from absl import logging
 from ml_collections import ConfigDict
-from ml_collections.config_dict.config_dict import placeholder
+from ml_collections.config_dict.config_dict import placeholder as config_placeholder
 from ml_collections.config_flags import config_flags
+
 
 def config_dict(*args, **kwargs):
     return ConfigDict(dict(*args, **kwargs))
@@ -70,6 +72,13 @@ def user_flags_to_config_dict(flags, flags_def):
     return output
 
 
+def update_config_dict(config, updates=None):
+    updated_config = deepcopy(config)
+    if updates is not None:
+        updated_config.update(ConfigDict(updates).copy_and_resolve_references())
+    return updated_config
+
+
 def flatten_config_dict(config, prefix=None):
     output = {}
     for key, val in config.items():
@@ -95,7 +104,7 @@ def function_args_to_config(fn, none_arg_types=None, exclude_args=None, override
         elif override_args is not None and name in override_args:
             config[name] = override_args[name]
         elif none_arg_types is not None and value is None and name in none_arg_types:
-            config[name] = placeholder(none_arg_types[name])
+            config[name] = config_placeholder(none_arg_types[name])
         else:
             config[name] = value
 
