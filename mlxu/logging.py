@@ -26,7 +26,7 @@ class WandBLogger(object):
         username = [
             c for c in username if c in string.ascii_letters + string.digits + "_-"
         ]
-        username = username[:32]  # usernames are limited to 32 characters
+        username = "".join(username[:32])  # usernames are limited to 32 chars
 
         config = config_dict()
         config.online = False
