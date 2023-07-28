@@ -1,5 +1,6 @@
 import os
 import random
+import string
 import tempfile
 import time
 import uuid
@@ -20,11 +21,15 @@ from .config import (
 class WandBLogger(object):
     @staticmethod
     def get_default_config(updates=None):
+        # grab username and perform filtering to prevent code injection
+        username = os.environ["USER"]
+        username = [c if c in string.ascii_letters + string.digits + "_-"][:32]
+
         config = config_dict()
         config.online = False
         config.prefix = ""
         config.project = "mlxu"
-        config.output_dir = "/tmp/mlxu"
+        config.output_dir = f"/tmp/mlxu-{username}"
         config.wandb_dir = ""
         config.random_delay = 0.0
         config.experiment_id = config_placeholder(str)
