@@ -23,7 +23,10 @@ class WandBLogger(object):
     def get_default_config(updates=None):
         # grab username and perform filtering to prevent code injection
         username = os.environ["USER"]
-        username = [c if c in string.ascii_letters + string.digits + "_-"][:32]
+        username = [
+            c for c in username if c in string.ascii_letters + string.digits + "_-"
+        ]
+        username = username[:32]  # usernames are limited to 32 characters
 
         config = config_dict()
         config.online = False
