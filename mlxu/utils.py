@@ -36,6 +36,13 @@ def open_file(path, mode='rb', cache_type='readahead'):
         return open(path, mode)
 
 
+def makedirs(path, exist_ok=True):
+    if path.startswith("gs://"):
+        return gcsfs.GCSFileSystem().makedirs(path, exist_ok=exist_ok)
+    else:
+        return os.makedirs(path, exist_ok=exist_ok)
+
+
 def save_pickle(obj, path):
     with open_file(path, 'wb') as fout:
         pickle.dump(obj, fout)

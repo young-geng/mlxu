@@ -10,5 +10,6 @@ from .config import (
 )
 from .logging import WandBLogger, prefix_metrics
 from .utils import (
-    Timer, open_file, save_pickle, load_pickle, text_to_array, array_to_text
+    Timer, open_file, save_pickle, load_pickle, text_to_array, array_to_text,
+    makedirs
 )

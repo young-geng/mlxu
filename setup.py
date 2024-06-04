@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='mlxu',
-    version='0.1.13',
+    version='0.1.14',
     license='MIT',
     description='Machine learning experiment utils.',
     url='https://github.com/young-geng/mlxu',
