@@ -26,13 +26,21 @@ def define_flags_with_default(**kwargs):
 
         if isinstance(val, ConfigDict):
             config_flags.DEFINE_config_dict(key, val)
+        elif val == bool:
+            absl.flags.DEFINE_bool(key, None, help_str)
         elif isinstance(val, bool):
             # Note that True and False are instances of int.
             absl.flags.DEFINE_bool(key, val, help_str)
+        elif val == int:
+            absl.flags.DEFINE_integer(key, None, help_str)
         elif isinstance(val, int):
             absl.flags.DEFINE_integer(key, val, help_str)
+        elif val == float:
+            absl.flags.DEFINE_float(key, None, help_str)
         elif isinstance(val, float):
             absl.flags.DEFINE_float(key, val, help_str)
+        elif val == str:
+            absl.flags.DEFINE_string(key, None, help_str)
         elif isinstance(val, str):
             absl.flags.DEFINE_string(key, val, help_str)
         else:
