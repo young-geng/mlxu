@@ -7,6 +7,8 @@ setup(
     description='Machine learning experiment utils.',
     url='https://github.com/young-geng/mlxu',
     packages=find_packages(include=['mlxu']),
+    author='Xinyang (Young) Geng',
+    author_email='young.gengxy@gmail.com',
     python_requires=">=3.7",
     install_requires=[
         'absl-py',
