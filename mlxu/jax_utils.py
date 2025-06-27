@@ -6,7 +6,7 @@ import jax
 import jax.numpy as jnp
 
 
-class JaxRNG(object):
+class RNGGenerator(object):
     """ A convenient stateful Jax RNG wrapper. Can be used to wrap RNG inside
         pure function.
     """
@@ -42,12 +42,16 @@ class JaxRNG(object):
         return cls.global_rng_generator(*args, **kwargs)
 
 
+# Alias for backward compatibility
+JaxRNG = RNGGenerator
+
+
 def init_rng(seed):
-    JaxRNG.init_global_rng(seed)
+    RNGGenerator.init_global_rng(seed)
 
 
 def next_rng(*args, **kwargs):
-    return JaxRNG.next_rng(*args, **kwargs)
+    return RNGGenerator.next_rng(*args, **kwargs)
 
 
 def wrap_function_with_rng(rng):
